@@ -14,7 +14,7 @@ import com.me.beursmavenmvc.view.WalletObserver;
  * @author jeroen
  */
 public interface Model {
-    void start(String speler);
+    void start();
     void end();
     
     void updateKoersen();

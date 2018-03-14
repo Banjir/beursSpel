@@ -5,20 +5,27 @@
  */
 package com.me.beursmavenmvc.controller;
 
+import com.me.beursmavenmvc.model.Model;
+import com.me.beursmavenmvc.view.MenuView;
+
 /**
  *
  * @author jeroen
  */
 public interface ControllerInterface {
+    
+     public MenuView getMenu() ;
+     public Model getModel() ;
+    
     public void updateKoersen();
     public void updateWallet();
     public void gaNaar(String keuze);
     
-    public void sell(String naam, Double aantal );
-    
-    public void buy(String naam, Double bedrag);
-    
-    public void selectPlayer(String naam);
+//    public void sell(String naam, Double aantal );
+//    
+//    public void buy(String naam, Double bedrag);
+//    
+//    public void selectPlayer(String naam);
     
    
 }

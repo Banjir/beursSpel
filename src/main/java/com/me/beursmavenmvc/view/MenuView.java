@@ -10,10 +10,15 @@ package com.me.beursmavenmvc.view;
  * @author jeroen
  */
 public interface MenuView {
-     
-    public void setWeergave(String weergave);
+
     public void show();
+
     void kies(String keuze);
-      boolean setActivity(boolean act) ;
-    
+
+    boolean setActivity(boolean act);
+
+    void activeerInput(String key, Luisteraar value);
+
+    String getFieldValue(int fieldIndex);
+
 }

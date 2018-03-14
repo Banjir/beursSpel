@@ -7,7 +7,9 @@ package com.me.beursmavenmvc.view;
 
 import com.me.beursmavenmvc.model.Model;
 import com.me.beursmavenmvc.controller.ControllerInterface;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -15,30 +17,43 @@ import java.util.Scanner;
  * @author jeroen
  */
 public class HoofdMenu implements WalletObserver, BeursObserver, MenuView {
-//    private HoofdMenu parent;
-//    private List<Menu> children;
 
     private Scanner input = new Scanner(System.in);
     private String weergave;
 
-    private Model gameModel;
-    private ControllerInterface controller;
-    private boolean actief = true;
+    private final Model gameModel;
 
-    public HoofdMenu(ControllerInterface controller, Model gameModel) {
+    private final Map<String, Luisteraar> activiteiten;
 
+    public HoofdMenu( Model gameModel) {
+        
+        this.setWeergave("maak uw keuze \n"
+                    + "1- kopen \n"
+                    + "2- verkopen \n"
+                    + "3- geef actuele quotes \n"
+                    + "4- geef waarde wallet \n"
+                    + "5- uitloggen \n" );
+        
         this.gameModel = gameModel;
-        this.controller = controller;
+        this.activiteiten = new HashMap<>();
 
         gameModel.registerObserver((BeursObserver) this);
         gameModel.registerObserver((WalletObserver) this);
 
     }
-
-    public void setWeergave(String weergave) {
+    // dit eventueel vanuit interface afdwingen (java9)
+     private void setWeergave(String weergave) {
         this.weergave = weergave;
     }
 
+
+    @Override
+    public void activeerInput(String key, Luisteraar value) {
+        activiteiten.put(key, value);
+    }
+
+   
+    @Override
     public void show() {
 
         System.out.println(this.weergave);
@@ -46,49 +61,43 @@ public class HoofdMenu implements WalletObserver, BeursObserver, MenuView {
         kies(input.nextLine());
     }
 
+    @Override
     public void kies(String keuze) {
 
-        switch (keuze) {
-            case "1":
-                
-                controller.gaNaar("1");
-                break;
-            case "2":
-                controller.gaNaar("1");
-                break;
-            case "3":
-                controller.updateKoersen();
-                break;
-            case "4":
-                controller.updateWallet();
-                break;
-            default:
-//                    doorgaan = false;
-
-        }
+        activiteiten.get(keuze).activeer();
 
     }
 
     @Override
+    public String getFieldValue(int fieldIndex) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    //observermethoden
+    @Override
     public void updateWallet(String wallet) {
-        if (this.actief) {
-            System.out.println("verse dikke portemonaie: " + wallet);
-            show();
-        }
+        System.out.println("verse dikke portemonaie: " + wallet);
+        show();
     }
 
     @Override
     public void updateBeurs(List<String> quotes) {
-        if (this.actief) {
-            System.out.println("verse quotes: " + quotes);
-            show();
-        }
+        System.out.println("verse quotes: " + quotes);
+        show();
     }
 
+    @Override
     public boolean setActivity(boolean act) {
-        this.actief = act;
 
-        return this.actief;
+        if (!act) {
+            gameModel.removeObserver((BeursObserver) (this));
+            gameModel.removeObserver((WalletObserver) (this));
+
+        } else {
+            gameModel.registerObserver((BeursObserver) this);
+            gameModel.registerObserver((WalletObserver) this);
+        }
+        return act;
     }
 
 }

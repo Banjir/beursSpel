@@ -21,10 +21,27 @@ public class BuyController implements ControllerInterface{
     
     BuyController(MainController mc) {
         parent = mc;
-        gameModel = mc.gameModel;
-        menu = new BuyMenu(this, gameModel);
+        gameModel = mc.getModel();
+        menu = new BuyMenu( gameModel);
+        menu.activeerInput("sell", ()-> sell(menu.getFieldValue(0), Double.parseDouble(menu.getFieldValue(1))));
+        menu.activeerInput("buy", ()-> buy(menu.getFieldValue(0), Double.parseDouble(menu.getFieldValue(1))));
+        menu.activeerInput("terug", ()-> gaNaar("parent"));
         
     }
+    
+     
+    private  void sell(String naam, Double aantal) {
+            gameModel.sell(naam, aantal);
+    }
+
+   
+    private  void buy(String naam, Double bedrag) {
+        gameModel.buy(naam, bedrag);
+    }
+
+   
+    
+    
 
     @Override
     public void updateKoersen() {
@@ -45,19 +62,15 @@ public class BuyController implements ControllerInterface{
        parent.updateKoersen(); // update set parents eigen menu default naar true;
     }
 
+   
     @Override
-    public void sell(String naam, Double aantal) {
-            gameModel.sell(naam, aantal);
+    public MenuView getMenu() {
+        return menu;
     }
 
     @Override
-    public void buy(String naam, Double bedrag) {
-        gameModel.buy(naam, bedrag);
-    }
-
-    @Override
-    public void selectPlayer(String naam) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Model getModel() {
+        return gameModel;
     }
 
     

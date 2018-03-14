@@ -8,10 +8,9 @@ package com.me.beursmavenmvc.model;
 import com.me.beursmavenmvc.view.BeursObserver;
 import com.me.beursmavenmvc.view.WalletObserver;
 import com.me.beursmavenmvc.view.GameExceptionObserver;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -24,9 +23,9 @@ public class Game implements Model{
     private Beurs beurs;
     private Player player;
     
-    List<BeursObserver> beursObservers= new ArrayList<>();
-    List<WalletObserver> walletObservers= new ArrayList<>();
-    List<GameExceptionObserver> exceptionObservers= new ArrayList<>();
+    Set<BeursObserver> beursObservers= new HashSet<>();
+    Set<WalletObserver> walletObservers= new HashSet<>();
+    Set<GameExceptionObserver> exceptionObservers= new HashSet<>();
 
 
     public Game() {
@@ -39,26 +38,22 @@ public class Game implements Model{
         String wie = helper.getUserInput("Geef naam speler: ");
         player = helper.loadPlayer(wie);
         
-        updateKoersen();
-        
-       
-
-        
+        updateKoersen();               
 
     }   
-
     
 
-    
+        
 
-    @Override
+  
     public void start(String speler) {
         player = helper.loadPlayer(speler);
     }
 
     @Override
     public void end() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         helper.savePlayer(player);
+        System.exit(0);
     }
 
     @Override
@@ -104,7 +99,7 @@ public class Game implements Model{
 
     @Override
     public void removeObserver(WalletObserver o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.walletObservers.remove(o);
     }
 
     @Override
@@ -114,9 +109,10 @@ public class Game implements Model{
 
     @Override
     public void removeObserver(BeursObserver o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.beursObservers.remove(o);
     }
     
+    @Override
     public void registerObserver(GameExceptionObserver o) {
         this.exceptionObservers.add(o);
     }

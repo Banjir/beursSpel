@@ -9,6 +9,6 @@ package com.me.beursmavenmvc.view;
  *
  * @author jeroen
  */
-public interface Observer {
-    public void update();
+public interface Luisteraar {
+    public void activeer() ;
 }

@@ -7,6 +7,9 @@ package com.me.beursmavenmvc;
 
 import com.me.beursmavenmvc.model.Game;
 import com.me.beursmavenmvc.controller.MainController;
+import com.me.beursmavenmvc.model.Model;
+import com.me.beursmavenmvc.view.HoofdMenu;
+import com.me.beursmavenmvc.view.MenuView;
 
 /**
  *
@@ -15,8 +18,9 @@ import com.me.beursmavenmvc.controller.MainController;
 public class Starter {
      public static void main(String[] args) {
 
-        Game game = new Game();
-        MainController mc = new MainController(game); //view van controller registreert zich bij game
+        Model game = new Game();
+        MenuView menu = new HoofdMenu(game);
+        MainController mc = new MainController(game, menu); 
         game.start();
 
     }
